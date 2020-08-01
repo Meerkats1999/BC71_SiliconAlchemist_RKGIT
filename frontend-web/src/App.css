@@ -1,0 +1,17 @@
+.App {
+    text-align: center;
+    background-color: #8EC5FC;
+    background-image: linear-gradient(62deg, #8EC5FC 0%, #E0C3FC 100%);
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    /*justify-content: center;*/
+    align-items: center;
+}
+
+.Heading{
+    font-size: 3rem;
+    font-family: 'Oswald', sans-serif;
+    padding:5px;
+    margin:0px;
+}

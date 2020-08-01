@@ -1,0 +1,31 @@
+{
+  "name": "speedwagon",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "start": "node scripts/start --port=8081",
+    "test": "jest"
+  },
+  "dependencies": {
+    "react": "16.6.3",
+    "react-native": "0.58.6"
+  },
+  "devDependencies": {
+    "@types/react": "^16.9.44",
+    "@types/react-native": "^0.63.2",
+    "ajv": "^6.12.3",
+    "babel-core": "^7.0.0-bridge.0",
+    "babel-jest": "26.2.2",
+    "colors": "^1.4.0",
+    "compare-versions": "^3.6.0",
+    "eslint": "^7.6.0",
+    "jest": "26.2.2",
+    "metro-react-native-babel-preset": "0.61.0",
+    "minimist": "^1.2.5",
+    "react-test-renderer": "16.6.3"
+  },
+  "jest": {
+    "preset": "react-native"
+  },
+  "license": "UNLICENSED"
+}
