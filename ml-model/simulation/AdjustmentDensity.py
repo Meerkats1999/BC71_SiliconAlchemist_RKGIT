@@ -2,10 +2,10 @@ import os
 import sys
 import numpy as np
 import time
-import traci
 
-#Scripts to be created
+#Modules to be edited
 from scripts.Dqn import Learner
+from scripts.auxilliary import makemap
 
 sys.path.insert(0, "/usr/share/sumo/tools")
 sumoBinary = "/usr/bin/sumo-gui"
@@ -13,8 +13,7 @@ sumoCli = "/usr/bin/sumo"
 sumoConfig = "data/bangalore.sumo.cfg"
 dumpFile = "data/fcd_edgedensity.xml"
 tripInfoFinal = "data/tripinfo_final.xml"
-
-
+import traci
 
 def get_state(detectorIDs):
     state = []
@@ -59,7 +58,45 @@ def calc_reward_edge_density(state, next_state):
 
 def main():
     # Control code here
-    
+    sumoGuiCmd = [sumoBinary, "-c", sumoConfig, "--fcd-output", dumpFile, "--tripinfo-output", tripInfoFinal]
+    sumoCliCmd = [sumoCli, "-c", sumoConfig, "--start"]
+    traci.start(sumoCliCmd)
+    TLIds = traci.trafficlight.getIDList()
+    actionsMap = makemap(TLIds)
+    detectorIDs = traci.inductionloop.getIDList()
+    state_space_size = traci.inductionloop.getIDCount()*2
+    action_space_size = len(actionsMap)
+    agent = Learner(state_space_size, action_space_size, 1.0)
+    #agent.load("./save/EdgeDensityModel.h5")
+    traci.close()
+    epochs = 10
+    for simulation in range(epochs):
+        if(simulation % 9 == 0 and simulation != 0):
+            traci.start(sumoGuiCmd)
+        else:
+            traci.start(sumoCliCmd)
+        # Get number of induction loops
+        state = get_state(detectorIDs)
+        state1 = get_state_edge_density()
+        total_reward = 0
+        simulationSteps = 0
+        while simulationSteps < 1000:
+            action = agent.act(state)
+            lightsPhase = actionsMap[action]
+            for light, index in zip(TLIds, range(len(TLIds))):
+                traci.trafficlight.setPhase(light, lightsPhase[index])
+            for i in range(2):
+                traci.simulationStep()
+            simulationSteps += 2
+            next_state = get_state(detectorIDs)
+            next_state1 = get_state_edge_density()
+            reward = calc_reward(state, next_state)
+            #reward = calc_reward_edge_density(state1, next_state1)
+            total_reward += reward
+            #agent.remember(state1, action, reward, next_state1)
+            state = next_state
+            state1 = next_state1
+        traci.close()
 
 if __name__ == '__main__':
     main()

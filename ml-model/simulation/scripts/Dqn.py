@@ -16,6 +16,9 @@ class Learner:
         self.firstHidden = 604
         self.secondHidden = 1166
         self.regressor = self._build_model()
+        self.exploration = exploration
+        self.exploration_decay = 0.995
+        self.min_exploration = 0.01
         self.memory = deque(maxlen=2000)
         self.batch_size = 200
         self.gamma = 0.95
@@ -29,16 +32,30 @@ class Learner:
         return regressor
 
     def act(self, state):
+        if np.random.rand() <= self.exploration:
+            action = np.random.choice(range(self.action_size))
+        else:
+            action = np.argmax(self.regressor.predict(state), axis=1)[0]
         return action
 
     def remember(self, state, action, reward, next_state):
-        return True
+        self.memory.append((state, action, reward, next_state))
 
     def replay(self):
-        return True
+        minibatch = random.sample(list(self.memory), self.batch_size)
+        for state, action, reward, next_state in minibatch:
+            # print "Reward: {}".format(type(reward))
+            target = reward + self.gamma*np.max(self.regressor.predict(next_state)[0])
+            target_f = self.regressor.predict(state)
+            # print target_f
+            # print target
+            target_f[0][action] = target
+            self.regressor.fit(state, target_f, epochs=1, verbose=0)
+        if self.exploration > self.min_exploration:
+            self.exploration *= self.exploration_decay
 
     def load(self, name):
-        return True
+        self.regressor.load_weights(name)
 
     def save(self, name):
-        return True
+        self.regressor.save_weights(name)
