@@ -87,6 +87,31 @@ const multiLocationBroadcaster = (socket) => {
     
 }
 
+const requestSimulationData = (socket) =>{
+    // currentSocket= socket;
+    // fetchSimulationData(socket);
+
+    // socket.on(CHANNELS.MODEL, (message) => {
+    //     console.log("Received MODEL, data length:", message.type);
+    //     switch(message.type){
+    //         case MODEL_REQUESTS.REQUEST_VEHICLES:
+    //             state.vehicle_data = message.data;
+    //             break;
+    //         case MODEL_REQUESTS.REQUEST_SIGNALS:
+    //             state.signal_data = message.data;
+    //             break;
+    //         default:console.log("invalid data");
+    //             break;
+    //     }
+    //     if(state.vehicle_data!=0 && state.signal_data!=0){
+    //         state.state=SIMULATION_STATES.READY;
+    //         console.log('ready to start simulation');
+    //     }
+        
+
+    // });
+}
+
 const setSimulationHandler = (socket) =>{
     socket.on(CHANNELS.CONTROL, (message) => {
         console.log("Received CONTROL", message);
@@ -100,6 +125,8 @@ const setSimulationHandler = (socket) =>{
             case 'pause':
                 pauseSimulation();
                 break;
+            // case 'fetch':fetchSimulationData();
+                // break;
             default:
                 break;
         }
@@ -115,7 +142,9 @@ const setSimulationHandler = (socket) =>{
 }
 
 const startSimulation=()=>{
+    // if(state.state==SIMULATION_STATES.READY || state.state == SIMULATION_STATES.PAUSED)
         state.state = SIMULATION_STATES.RUNNING;
+    // else console.log("NOT READY");
 }
 
 const resetSimulation = () =>{
@@ -134,6 +163,11 @@ const showState = ()=>{
         Object.keys(state.clients).length,
         state.clients);
 }
+
+// const fetchSimulationData = (socket = currentSocket) =>{
+    // socket.emit(CHANNELS.MODEL, MODEL_REQUESTS.REQUEST_VEHICLES)
+    // socket.emit(CHANNELS.MODEL, MODEL_REQUESTS.REQUEST_SIGNALS)
+// }
 
 const broadcastSimulationData = (socket)=>{
     // console.log("Broadcasting simulation to", socket.id,   state.time);
@@ -171,6 +205,7 @@ module.exports = {
     resetSimulation,
     startSimulation,
     showState,
+    // fetchSimulationData,
     pauseSimulation,
     setSimData,
 }
