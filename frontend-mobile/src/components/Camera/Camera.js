@@ -1,5 +1,6 @@
 import React, {PureComponent} from 'react';
 import {StyleSheet, Modal, TouchableOpacity, View} from 'react-native';
+import Geolocation from '@react-native-community/geolocation';
 import {RNCamera} from 'react-native-camera';
 
 class Camera extends PureComponent {
@@ -45,6 +46,14 @@ class Camera extends PureComponent {
     if (this.camera) {
       const options = {quality: 0.5, base64: true};
       const data = await this.camera.takePictureAsync(options);
+
+      Geolocation.getCurrentPosition(({coords}) => {
+        this.props.setCoords({
+          longitude: coords.longitude,
+          latitude: coords.latitude,
+        });
+      });
+
       this.props.setPreview(data.uri);
       this.props.onRequestClose();
     }

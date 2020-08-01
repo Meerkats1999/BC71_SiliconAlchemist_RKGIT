@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, Fragment} from 'react';
 import {
   View,
   Text,
@@ -7,13 +7,15 @@ import {
   TextInput,
   Dimensions,
   ScrollView,
-  Button,
   Image,
+  ActivityIndicator,
 } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import DropDownPicker from 'react-native-dropdown-picker';
 import Camera from '../../components/Camera/Camera';
 import PreviewModal from '../../components/Modal/Modal';
+import {submitReport} from '../../API/upload';
+import {showMessage, hideMessage} from 'react-native-flash-message';
 
 const height = Dimensions.get('window').height;
 
@@ -21,6 +23,46 @@ export default () => {
   const [modalVisible, setModalVisible] = useState(false);
   const [previewVisible, setPreviewVisible] = useState(false);
   const [preview, setPreview] = useState('');
+
+  const [title, setTitle] = useState('');
+  const [type, setType] = useState('');
+  const [description, setDescription] = useState('');
+  const [coords, setCoords] = useState({longitude: 0, latitude: 0});
+  const [loading, setLoading] = useState(false);
+
+  const submitHandler = async () => {
+    if (title.length > 0 && type.length > 0 && description.length > 0) {
+      try {
+        setLoading(true);
+        await submitReport(
+          preview,
+          coords.latitude,
+          coords.longitude,
+          title,
+          type,
+          description,
+        );
+        showMessage({
+          message: 'Report Submitted.',
+          description:
+            'Report of incident has been submitted. Thank you for your contribution.',
+          type: 'success',
+        });
+        Pus;
+        setPreview('');
+        setTitle('');
+        setType('');
+        setDescription('');
+        setCoords({latitude: 0, longitude: 0});
+        setLoading(false);
+      } catch (err) {
+        console.log(err);
+        setLoading(false);
+      }
+    } else {
+      console.log('Incomplete field', title, type, description, coords);
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -51,6 +93,7 @@ export default () => {
         </View>
 
         <TouchableOpacity
+          disabled={loading}
           style={styles.cameraButton}
           onPress={() => setModalVisible(true)}>
           <Ionicons name={'camera'} size={height / 25} color={'white'} />
@@ -72,7 +115,12 @@ export default () => {
           }}>
           Title
         </Text>
-        <TextInput style={styles.title} />
+        <TextInput
+          editable={!loading}
+          value={title}
+          style={styles.title}
+          onChangeText={(e) => setTitle(e)}
+        />
         <Text
           style={{
             color: 'white',
@@ -102,7 +150,8 @@ export default () => {
               value: 'accident',
             },
           ]}
-          // defaultValue={this.state.country}
+          disabled={loading}
+          // defaultValue="pothole"
           containerStyle={{height: 40}}
           style={styles.dropDown}
           itemStyle={{
@@ -116,12 +165,7 @@ export default () => {
             color: 'white',
             borderColor: 'black',
           }}
-          conta
-          // onChangeItem={(item) =>
-          //   this.setState({
-          //     country: item.value,
-          //   })
-          // }
+          onChangeItem={(item) => setType(item.value)}
         />
         <Text
           style={{
@@ -133,6 +177,7 @@ export default () => {
           Description
         </Text>
         <TextInput
+          editable={!loading}
           style={{
             ...styles.title,
             height: height / 10,
@@ -140,12 +185,15 @@ export default () => {
           }}
           multiline={true}
           textAlignVertical="top"
+          value={description}
+          onChangeText={(e) => setDescription(e)}
         />
       </ScrollView>
       <Camera
         modalVisible={modalVisible}
         onRequestClose={() => setModalVisible(false)}
         setPreview={(baseUri) => setPreview(baseUri)}
+        setCoords={(coords) => setCoords({...coords})}
       />
       <PreviewModal
         visible={previewVisible}
@@ -157,9 +205,31 @@ export default () => {
           />
         )}
       </PreviewModal>
-      <TouchableOpacity style={styles.submitButton}>
-        <Ionicons name="ios-warning-outline" size={height / 30} color="red" />
-        <Text style={{fontSize: 25, color: 'red'}}>Report</Text>
+      <TouchableOpacity style={styles.submitButton} onPress={submitHandler}>
+        {!loading ? (
+          <Fragment>
+            <Ionicons
+              name="ios-warning-outline"
+              size={height / 30}
+              color="red"
+            />
+            <Text style={{fontSize: 25, color: 'red'}}>Report</Text>
+          </Fragment>
+        ) : (
+          <Fragment>
+            <ActivityIndicator
+              size="small"
+              color="red"
+              style={{height: '100%'}}
+            />
+            <Text
+              style={{
+                color: 'red',
+              }}>
+              Please Wait..
+            </Text>
+          </Fragment>
+        )}
       </TouchableOpacity>
     </View>
   );
