@@ -19,6 +19,8 @@ io.on('connection', (socket) => {
 
   ioListeners.clientLocationBroadcaster(socket);
   ioListeners.multiLocationBroadcaster(socket);
+  ioListeners.requestSimulationData(socket);
+  ioListeners.setSimulationHandler(socket);
 
   socket.on('disconnect', function () {
     console.log('disconnected', this.id);
