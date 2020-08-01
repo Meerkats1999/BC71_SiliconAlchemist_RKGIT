@@ -3,6 +3,11 @@
     background-color: #8EC5FC;
     background-image: linear-gradient(62deg, #8EC5FC 0%, #E0C3FC 100%);
     height: 100vh;
+    /*background-color: #21D4FD;*/
+    /*background-image: linear-gradient(19deg, #21D4FD 0%, #B721FF 100%);*/
+    /*background-color: #21D4FD;*/
+    /*background-image: linear-gradient(19deg, #21D4FD 0%, #B721FF 100%);*/
+
     display: flex;
     flex-direction: column;
     /*justify-content: center;*/
@@ -10,8 +15,25 @@
 }
 
 .Heading{
-    font-size: 3rem;
-    font-family: 'Oswald', sans-serif;
+    font-size: 4rem;
+    font-family: 'Righteous','Oswald', sans-serif;
     padding:5px;
+    color: rgb(92, 83, 83);
     margin:0px;
+    z-index: 1001;
+    position: absolute;
+    top:0px
 }
+
+.MapContainer {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    z-index: 1;
+    
+}
+.vehicle{
+    transform: scale(0.1);
+}
+
+
