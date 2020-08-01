@@ -112,8 +112,7 @@ venv/
 ENV/
 env.bak/
 venv.bak/
-simulation/env/
-traffic-density-cctv/env/
+env/
 
 # Spyder project settings
 .spyderproject
@@ -138,3 +137,6 @@ dmypy.json
 
 # Cython debug symbols
 cython_debug/
+
+#weights
+bin/
