@@ -1,50 +1,42 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow
- * @lint-ignore-every XPLATJSCOPYRIGHT1
- */
+import * as React from 'react';
+import 'react-native-gesture-handler';
+import {StatusBar} from 'react-native';
+import {NavigationContainer, DarkTheme} from '@react-navigation/native';
+import {createStackNavigator} from '@react-navigation/stack';
 
-import React, {Component} from 'react';
-import {Platform, StyleSheet, Text, View} from 'react-native';
+import MainPage from './src/screens/MainPage/MainPage';
+import Login from './src/screens/Login/Login';
 
-const instructions = Platform.select({
-  ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
-  android:
-    'Double tap R on your keyboard to reload,\n' +
-    'Shake or press menu button for dev menu',
-});
+const Stack = createStackNavigator();
 
-type Props = {};
-export default class App extends Component<Props> {
-  render() {
-    return (
-      <View style={styles.container}>
-        <Text style={styles.welcome}>Welcome to React Native!</Text>
-        <Text style={styles.instructions}>To get started, edit App.js</Text>
-        <Text style={styles.instructions}>{instructions}</Text>
-      </View>
-    );
-  }
+function App() {
+  return (
+    <NavigationContainer theme={DarkTheme}>
+      <Stack.Navigator initialRouteName="Login">
+        <Stack.Screen
+          name="Login"
+          options={{headerShown: false}}
+          component={Login}
+        />
+        <Stack.Screen
+          name="Home"
+          options={{headerShown: false}}
+          component={MainPage}
+        />
+      </Stack.Navigator>
+      <StatusBar
+        barStyle="light-content"
+        // dark-content, light-content and default
+        hidden={false}
+        //To hide statusBar
+        backgroundColor="black"
+        //Background color of statusBar
+        translucent={false}
+        //allowing light, but not detailed shapes
+        networkActivityIndicatorVisible={true}
+      />
+    </NavigationContainer>
+  );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
-  },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
-  },
-  instructions: {
-    textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5,
-  },
-});
+export default App;
