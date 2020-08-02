@@ -1,7 +1,7 @@
 import React from 'react';
 import Geolocation from '@react-native-community/geolocation';
 import {View, Text, StyleSheet, PermissionsAndroid} from 'react-native';
-import MapView, {PROVIDER_GOOGLE, Marker} from 'react-native-maps';
+import MapView, {PROVIDER_GOOGLE, Marker, Polyline} from 'react-native-maps';
 import CustomMarker from '../Marker/Marker';
 
 import {customStyle} from './customStyle';
@@ -31,6 +31,24 @@ const Map = (props) => {
             latitude: props.region.latitude,
             longitude: props.region.longitude,
           }}
+        />
+        <Polyline
+          coordinates={[
+            {latitude: 12.9728469, longitude: 77.6127155},
+            {latitude: 12.9738174, longitude: 77.612936},
+            {latitude: 12.9752977, longitude: 77.60748},
+            {latitude: 12.9765402, longitude: 77.5996753},
+          ]}
+          // strokeColor="rgba(255,0,0,0.5)" // fallback for when `strokeColors` is not supported by the map-provider
+          strokeColors={[
+            '#7F0000',
+            '#00000000', // no color, creates a "long" gradient between the previous and next coordinate
+            '#B24112',
+            '#E5845C',
+            '#238C23',
+            '#7F0000',
+          ]}
+          strokeWidth={6}
         />
       </MapView>
       {props.children}
