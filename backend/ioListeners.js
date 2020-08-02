@@ -125,8 +125,6 @@ const setSimulationHandler = (socket) =>{
             case 'pause':
                 pauseSimulation();
                 break;
-            // case 'fetch':fetchSimulationData();
-                // break;
             default:
                 break;
         }
@@ -164,16 +162,10 @@ const showState = ()=>{
         state.clients);
 }
 
-// const fetchSimulationData = (socket = currentSocket) =>{
-    // socket.emit(CHANNELS.MODEL, MODEL_REQUESTS.REQUEST_VEHICLES)
-    // socket.emit(CHANNELS.MODEL, MODEL_REQUESTS.REQUEST_SIGNALS)
-// }
-
 const broadcastSimulationData = (socket)=>{
     // console.log("Broadcasting simulation to", socket.id,   state.time);
     socket.emit(CHANNELS.LOCATIONS, state.vehicle_data[state.time]);
     socket.emit(CHANNELS.SIGNALS, state.signal_data[state.time]);
-    socket.emit('predict', 'hello')
 }
 
 const pauseSimulation = ()=> {
@@ -192,8 +184,6 @@ const setSimData = (vehicle,light)=>{
     state.vehicle_data = vehicle;
 }
 
-
-
 setTimer();
 
 module.exports = {
@@ -205,7 +195,6 @@ module.exports = {
     resetSimulation,
     startSimulation,
     showState,
-    // fetchSimulationData,
     pauseSimulation,
     setSimData,
 }
