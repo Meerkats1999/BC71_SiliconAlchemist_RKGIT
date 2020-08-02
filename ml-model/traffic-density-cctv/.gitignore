@@ -140,3 +140,7 @@ cython_debug/
 
 #weights
 bin/
+
+#input and output
+input/
+output/
