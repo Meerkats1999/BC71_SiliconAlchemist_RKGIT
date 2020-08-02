@@ -36,5 +36,24 @@ router.put('/create', async function (req, res, next) {
   }
 });
 
+router.put('/emergency', async function (req, res, next) {
+  try {
+    const {lat = '1', lon = '2'} = req.body;
+    let feedback = await FeedbackModel.create({
+      lat,
+      lon,
+      contentURL:'http://www.pngmart.com/files/7/Emergency-PNG-Transparent-Image.png',
+      title:'Emergency',
+      type:'Emergency',
+      description:"Emergency request"
+    });
+    res.json({feedback});
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({
+      err: err.message
+    });
+  }
+});
 
 module.exports = router;

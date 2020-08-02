@@ -130,12 +130,27 @@ const setSimulationHandler = (socket) =>{
         }
       });
     socket.on(CHANNELS.GYRO_DATA, (message)=>{
-        console.log("Received Gyro data from device");
+        // console.log("Received Gyro data from device");
         socket.broadcast.emit(CHANNELS.GYRO_REQUEST, message);
     });
     socket.on(CHANNELS.GYRO_RESPONSE, (message)=>{
         console.log("Received Gyro response from predictor", message);
-        socket.broadcast.emit(CHANNELS.GYRO_RESULT, message);
+        switch(message.result){
+            case '0':break;
+            case '1':socket.broadcast.emit(CHANNELS.GYRO_RESULT, {
+                message:'Speed bump detected',
+                type:'info'
+            }); break;
+            case '2':socket.broadcast.emit(CHANNELS.GYRO_RESULT, {
+                message:'Pothole detected',
+                type:'info'
+            }); break;
+            case '3':socket.broadcast.emit(CHANNELS.GYRO_RESULT, {
+                message:'Crash detected',
+                type:'danger'
+            }); break;
+
+        }
     });
 }
 
