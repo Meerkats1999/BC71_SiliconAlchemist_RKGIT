@@ -1,5 +1,5 @@
 import React from 'react';
-import Geolocation from '@react-native-community/geolocation';
+import {useSelector} from 'react-redux';
 import {View, Text, StyleSheet, PermissionsAndroid} from 'react-native';
 import MapView, {PROVIDER_GOOGLE, Marker, Polyline} from 'react-native-maps';
 import CustomMarker from '../Marker/Marker';
@@ -7,6 +7,8 @@ import CustomMarker from '../Marker/Marker';
 import {customStyle} from './customStyle';
 
 const Map = (props) => {
+  const {dest} = useSelector((state) => state.dest);
+
   return (
     <View style={styles.container}>
       <MapView
@@ -27,29 +29,43 @@ const Map = (props) => {
           ))}
         <Marker
           image={props.currentPos}
+          style={{height: 100}}
           coordinate={{
             latitude: props.region.latitude,
             longitude: props.region.longitude,
           }}
         />
-        <Polyline
-          coordinates={[
-            {latitude: 12.9728469, longitude: 77.6127155},
-            {latitude: 12.9738174, longitude: 77.612936},
-            {latitude: 12.9752977, longitude: 77.60748},
-            {latitude: 12.9765402, longitude: 77.5996753},
-          ]}
-          // strokeColor="rgba(255,0,0,0.5)" // fallback for when `strokeColors` is not supported by the map-provider
-          strokeColors={[
-            '#7F0000',
-            '#00000000', // no color, creates a "long" gradient between the previous and next coordinate
-            '#B24112',
-            '#E5845C',
-            '#238C23',
-            '#7F0000',
-          ]}
-          strokeWidth={6}
-        />
+        {dest === 'vfs' && (
+          <Marker
+            pinColor="green"
+            style={{height: 100}}
+            coordinate={{
+              latitude: 12.979259,
+              longitude: 77.602497,
+            }}
+          />
+        )}
+        {dest === 'vfs' && (
+          <Polyline
+            coordinates={[
+              {longitude: 77.612797, latitude: 12.973132},
+              {longitude: 77.612996, latitude: 12.973979},
+              {longitude: 77.607948, latitude: 12.975275},
+              {longitude: 77.608699, latitude: 12.97723},
+              {longitude: 77.602497, latitude: 12.979259},
+            ]}
+            strokeColor="#94fc03" // fallback for when `strokeColors` is not supported by the map-provider
+            strokeColors={[
+              '#7F0000',
+              '#00000000', // no color, creates a "long" gradient between the previous and next coordinate
+              '#B24112',
+              '#E5845C',
+              '#238C23',
+              '#7F0000',
+            ]}
+            strokeWidth={6}
+          />
+        )}
       </MapView>
       {props.children}
     </View>

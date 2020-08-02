@@ -37,8 +37,6 @@ export const centerCoords = {
   lat: 12.973074,
   lng: 77.612366,
 };
-// export const url = 'http://10.99.7.214:3002';
-export const url = 'http://rkserver.herokuapp.com';
 const adder =
   'yarn add  git+https://git@github.com/react-native-community/react-native-maps.git\n';
 
@@ -64,4 +62,3 @@ export async function Runtime_permission() {
     console.warn(err);
   }
 }
-export const rootUrl = 'https://speedwagon-service.herokuapp.com';

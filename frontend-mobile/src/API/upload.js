@@ -1,5 +1,7 @@
 import RNFetchBlob from 'rn-fetch-blob';
-import {rootUrl} from '../constants';
+import * as axios from 'axios';
+import {url} from './index';
+import {showMessage, hideMessage} from 'react-native-flash-message';
 
 const getFileExtension = (path) =>
   path.slice(((path.lastIndexOf('.') - 1) >>> 0) + 2);
@@ -45,7 +47,7 @@ export const submitReport = async (
     });
     let response = await RNFetchBlob.fetch(
       'PUT',
-      rootUrl + '/feedback/create',
+      url + '/feedback/create',
       {
         'Content-Type': 'multipart/form-data',
       },
@@ -58,3 +60,18 @@ export const submitReport = async (
     return false;
   }
 };
+
+export const reportEmergency = async (lat, lon) => {
+  try {
+    await axios.put(url + '/feedback/emergency', {lat, lon});
+    showMessage({
+      message: 'Emergency called.',
+      description: 'Emergency report submitted.',
+      type: 'danger',
+    });
+  } catch (e) {
+    console.log('error in emergency', e);
+    return false;
+  }
+};
+
