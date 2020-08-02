@@ -141,3 +141,7 @@ cython_debug/
 
 #weights
 traffic-density-cctv/bin/
+
+#input and output
+traffic-density-cctv/input/
+traffic-density-cctv/output/
