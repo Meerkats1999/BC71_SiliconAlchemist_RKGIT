@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {FaCarSide, FaTruck, FaBus, FaMotorcycle, FaTrafficLight} from 'react-icons/fa';
 // import {car,bus,bike} from '../assets/';
 import bus from '../assets/bus.png';
@@ -37,20 +37,44 @@ const colorTypes = {
   trafficLightAmber: amber
 };
 
-const marker = (props) => {
-  const {text, type = 'bike', $hover, angle, src = null} = props;
-  const style = $hover ? greatPlaceStyleHover : greatPlaceStyle;
-  let image = text == 'ghost' ? GhostImg : getImage(type);
-  // const color = colorTypes[type];
-  const rotationStyle = {transform: `rotate(${angle - 270}deg)`,}
-  return (
-    <div className='vehicle' style={rotationStyle}>
-      <div style={style}>
-        {src && <img src={src} width="160"/>}
-        {!src && <img src={image} width="40"/>}
+class Marker extends React.Component {
+  state = {
+    accepted: false,
+    rejected: false
+  }
+
+  render() {
+    const {text, type = 'bike', $hover, angle, src = null} = this.props;
+    const style = $hover ? greatPlaceStyleHover : greatPlaceStyle;
+    let image = text == 'ghost' ? GhostImg : getImage(type);
+    // const color = colorTypes[type];
+    const rotationStyle = {transform: `rotate(${angle - 270}deg)`,}
+    return (
+      <div className='vehicle' style={rotationStyle}>
+        <div style={style}>
+          {src && !this.state.rejected && (
+            <>
+              <img src={src} width="160"/>
+              {!this.state.accepted && (
+                <div style={{flexDirection: 'row', display: 'flex'}}>
+                  <button
+                    onClick={() => this.setState({accepted: true})}
+                    style={{backgroundColor: 'green', color: 'white'}}>Accept
+                  </button>
+                  <button
+                    onClick={() => this.setState({rejected: true})}
+                    style={{backgroundColor: 'red', color: 'white'}}>Reject
+                  </button>
+                </div>
+              )}
+
+            </>
+          )}
+          {!src && <img src={image} width="40"/>}
+        </div>
       </div>
-    </div>
-  )
+    )
+  }
 };
 
-export default marker;
+export default Marker;
