@@ -1,3 +1,3 @@
-# BC71_SiliconAlchemist_RKGIT
+# Traffic Control using Artificial Intelligence - SpeedWagon
 
-This folder contains the Machine Learning model for SpeedWagon.
+This folder contains the machine learning models for SpeedWagon. Please look inside specific folders for more details.
