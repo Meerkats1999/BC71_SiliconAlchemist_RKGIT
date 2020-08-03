@@ -4,7 +4,7 @@
     text-transform: uppercase;
     text-decoration: none;
     background: rgb(4, 167, 9);
-    padding: 20px 140px;
+    padding: 10px 80px;
     border-radius: 5px;
     display: inline-block;
     border: none;
@@ -15,7 +15,7 @@
   text-transform: uppercase;
   text-decoration: none;
   background: #990000;
-  padding: 20px 140px;
+  padding: 10px 80px;
   border-radius: 5px;
   display: inline-block;
   border: none;
@@ -26,7 +26,7 @@
   text-transform: uppercase;
   text-decoration: none;
   background: rgb(37, 186, 255);
-  padding: 20px 140px;
+  padding: 10px 80px;
   border-radius: 5px;
   display: inline-block;
   border: none;
@@ -39,7 +39,7 @@
   -moz-box-shadow: 0px 5px 40px -10px rgba(0,0,0,0.57);
   box-shadow: 5px 40px -10px rgba(0,0,0,0.57);
   transition: all 0.4s ease 0s;
-  }
+}
 .red:hover {
   background: #434343;
   letter-spacing: 1px;

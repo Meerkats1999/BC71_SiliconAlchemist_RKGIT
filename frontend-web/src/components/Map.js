@@ -53,7 +53,6 @@ const map = (props) => {
 
               <Chart
                 key={id}
-
                 light={state}
               />
             </div>

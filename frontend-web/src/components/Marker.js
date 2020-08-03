@@ -54,7 +54,7 @@ class Marker extends React.Component {
         <div style={style}>
           {src && !this.state.rejected && (
             <>
-              <img src={src} width="160"/>
+              <img src={src} width="140" style={{width: 140}}/>
               {!this.state.accepted && (
                 <div style={{flexDirection: 'row', display: 'flex'}}>
                   <button
