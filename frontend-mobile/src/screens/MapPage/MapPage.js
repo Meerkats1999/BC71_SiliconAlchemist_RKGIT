@@ -22,6 +22,45 @@ import RouteSelection from '../../Modals/RouteSelection';
 
 const height = Dimensions.get('window').height;
 
+const speed = [
+  {
+    current: 40,
+    suggested: 31,
+  },
+  {
+    current: 47,
+    suggested: 31,
+  },
+  {
+    current: 39,
+    suggested: 31,
+  },
+  {
+    current: 36,
+    suggested: 33,
+  },
+  {
+    current: 34,
+    suggested: 34,
+  },
+  {
+    current: 35,
+    suggested: 37,
+  },
+  {
+    current: 32,
+    suggested: 42,
+  },
+  {
+    current: 35,
+    suggested: 41,
+  },
+  {
+    current: 40,
+    suggested: 31,
+  },
+];
+
 export default React.memo(() => {
   const {dest} = useSelector((state) => state.dest);
   const slideUp = useRef(new Animated.Value(1)).current;
@@ -31,6 +70,11 @@ export default React.memo(() => {
     longitude: 77.612797,
     latitudeDelta: 0.0922,
     longitudeDelta: 0.0421,
+  });
+  const [speedMeter, setSpeedmeter] = useState({
+    current: 0,
+    suggested: 0,
+    overSpeed: false,
   });
   const [visible, setVisible] = useState(false);
 
@@ -69,7 +113,28 @@ export default React.memo(() => {
   };
 
   useEffect(() => {
+    let i = 0;
     getLocationData((data) => data && setMarkers(data.vehicles));
+    setInterval(() => {
+      setSpeedmeter((prev) => {
+        if (speed[i].current > speed[i].suggested) {
+          return {
+            ...prev,
+            current: speed[i].current,
+            suggested: speed[i].suggested,
+            overSpeed: true,
+          };
+        }
+        return {
+          ...prev,
+          current: speed[i].current,
+          suggested: speed[i].suggested,
+          overSpeed: false,
+        };
+      });
+      i++;
+      if (i === speed.length - 1) i = 0;
+    }, 3000);
   }, []);
 
   return (
@@ -114,6 +179,17 @@ export default React.memo(() => {
       <TouchableOpacity style={styles.report} onPress={() => sendEmergency()}>
         <Ionicons name="ios-warning-outline" size={height / 25} color="red" />
       </TouchableOpacity>
+      <TouchableOpacity
+        style={{
+          ...styles.speed,
+          borderColor: speedMeter.overSpeed ? '#ff2b41' : '#14ff54',
+          backgroundColor: speedMeter.overSpeed ? '#ff707f' : '#91ffaf',
+        }}>
+        <Text style={{fontSize: 35, fontWeight: 'bold'}}>
+          {speedMeter.current}
+        </Text>
+        <Text style={{fontWeight: 'bold'}}>Kmph</Text>
+      </TouchableOpacity>
       <Modal visible={visible} onRequestClose={onRequestClose}>
         <RouteSelection onRequestClose={onRequestClose} />
       </Modal>
@@ -156,5 +232,21 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderRadius: 50,
     marginLeft: 10,
+  },
+  speed: {
+    backgroundColor: 'white',
+    zIndex: 3,
+    height: 70,
+    width: 80,
+    top: '25%',
+    position: 'absolute',
+    borderTopRightRadius: 50,
+    borderBottomRightRadius: 50,
+    borderWidth: 4,
+    borderColor: '#14ff54',
+    backgroundColor: '#91ffaf',
+    borderLeftWidth: 0,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
