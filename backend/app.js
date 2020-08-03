@@ -9,8 +9,8 @@ const ioListeners = require('./ioListeners');
 
 const fs = require('fs');
 
-let vehicle_data =  JSON.parse(fs.readFileSync('fcd_output.json'));
-let light_data =  JSON.parse(fs.readFileSync('signal_output.json'));
+let vehicle_data = JSON.parse(fs.readFileSync('fcd_output.json'));
+let light_data = JSON.parse(fs.readFileSync('signal_output.json'));
 ioListeners.setSimData(vehicle_data, light_data);
 app.use(bodyParser.json())
 
@@ -34,25 +34,25 @@ stdin.addListener("data", function (data) {
   const value = data.toString().trim()
   switch (value) {
     case "1":
-        ioListeners.showState()
+      ioListeners.showState()
       break;
     case '2':
-        ioListeners.resetSimulation()
+      ioListeners.resetSimulation()
       break;
     case '3':
-        ioListeners.startSimulation()
-        ioListeners.showState()
+      ioListeners.startSimulation()
+      ioListeners.showState()
       break;
-    case '4': 
+    case '4':
       // ioListeners.fetchSimulationData();
       break;
     case '5':
-        ioListeners.pauseSimulation();
-        break;
-  
+      ioListeners.pauseSimulation();
+      break;
+
     default:
-        console.log("\n Enter proper state:");
-        break;
+      console.log("\n Enter proper state:");
+      break;
   }
 });
 

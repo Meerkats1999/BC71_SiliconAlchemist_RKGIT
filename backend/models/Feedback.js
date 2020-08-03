@@ -6,8 +6,8 @@ const postSchema = mongoose.Schema({
     type: String,
     required: true
   },
-  lon:{
-    type:String,
+  lon: {
+    type: String,
     default: ''
   },
   createdOn: {
@@ -16,7 +16,7 @@ const postSchema = mongoose.Schema({
   },
   contentURL: {
     type: String,
-    required:true
+    required: true
   },
   title: {
     type: String,
@@ -40,7 +40,7 @@ async function get(_id) {
 }
 
 async function list() {
-  return await Model.find({}).sort({createdOn:-1});
+  return await Model.find({}).sort({createdOn: -1});
 }
 
 async function create(fields) {
@@ -48,6 +48,7 @@ async function create(fields) {
   await model.save();
   return await get(model._id);
 }
+
 module.exports = {
   get,
   list,

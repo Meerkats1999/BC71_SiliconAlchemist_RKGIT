@@ -18,11 +18,6 @@ const SIMULATION_STATES = {
     READY:'READY'
 }
 
-// const MODEL_REQUESTS= {
-//     REQUEST_VEHICLES:'REQUEST_VEHICLES',
-//     REQUEST_SIGNALS:'REQUEST_SIGNALS'
-// }
-
 const INITIAL_STATE = {
     state:SIMULATION_STATES.RUNNING,
     vehicle_data:[],
