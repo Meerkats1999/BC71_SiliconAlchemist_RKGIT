@@ -1,33 +1,45 @@
 import socketio
-import json
+import pickle
+import numpy as np
+import json;
+try:
+    import thread
+except ImportError:
+    import _thread as thread
 import time
-vehicle_data=[]
-signal_data =[]
-with open('fcd_output.json') as jsonFile:
-    vehicle_data = json.load(jsonFile)
-with open('signal_output.json') as jsonFile:
-    signal_data = json.load(jsonFile)
 
+filename = 'finalized_model.sav'
+model = pickle.load(open(filename,'rb') )
 sio = socketio.Client()
+@sio.event
+def message(data):
+    print('I received a message!')
 
-@sio.on('MODEL')
+@sio.on('GYRO_REQUEST')
 def on_message(data):
-    print("Received message", data)
-    if data=='REQUEST_VEHICLES':
-        obj = {"type":"REQUEST_VEHICLES","data":vehicle_data}
-        sio.emit('MODEL',obj )
-    elif data=='REQUEST_SIGNALS':
-        obj = {"type":"REQUEST_SIGNALS","data":signal_data}
-        sio.emit('MODEL',obj )
+    print('I received a message!')
+    # print(data)
+    # obj = json.loads(message)
+    x = data #obj['data']
+    if len(x) == 30:
+        x2 = np.array([x])
+        x2.reshape(-1,1)
+        print(x2)
+        pred = model.predict(x2)
+        print(pred)
+        if pred[0] != 0:
+            sio.emit('GYRO_RESPONSE', {'result': str(pred[0])})
+@sio.event
+def connect():
+    print("I'm connected!")
 
-url = 'http://localhost:3002/'
-urlOnline = 'http://rkserver.herokuapp.com'
-urlNav = 'http://192.168.31.186:3002'
+@sio.event
+def connect_error():
+    print("The connection failed!")
 
-sio.connect(url)
+@sio.event
+def disconnect():
+    print("I'm disconnected!")
 
-# for traffic in data:
-#     sio.emit('MODEL', traffic)
-#     time.sleep(5)
-
-print("Data client listening")
+sio.connect('https://speedwagon-service.herokuapp.com')
+#sio.connect('http://localhost:3002')
