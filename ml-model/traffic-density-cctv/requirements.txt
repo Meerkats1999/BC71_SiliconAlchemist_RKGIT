@@ -10,7 +10,7 @@ opencv-contrib-python==4.3.0.36
 opencv-python==4.3.0.36
 protobuf==3.12.4
 six==1.15.0
-tensorflow==1.5.0
+tensorflow==1.15.2
 tensorflow-tensorboard==1.5.1
 Werkzeug==1.0.1
 zipp==3.1.0
