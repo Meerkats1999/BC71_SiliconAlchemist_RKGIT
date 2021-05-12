@@ -5,7 +5,7 @@
   "dependencies": {
     "axios": "^0.19.2",
     "bootstrap": "^4.3.1",
-    "chart.js": "^2.9.2",
+    "chart.js": "^2.9.4",
     "google-map-react": "^1.1.5",
     "react": "^16.11.0",
     "react-bootstrap": "^1.0.0-beta.14",
